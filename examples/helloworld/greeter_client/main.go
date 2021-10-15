@@ -21,6 +21,7 @@ package main
 
 import (
 	"context"
+	"google.golang.org/grpc/metadata"
 	"log"
 	"os"
 	"time"
@@ -50,6 +51,8 @@ func main() {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	ctx = context.WithValue(ctx, 1, 10)
+	md := metadata.Pairs("k1", "v1")
+	ctx = metadata.NewOutgoingContext(ctx, md)
 	defer cancel()
 	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 	if err != nil {

@@ -21,6 +21,7 @@ package main
 
 import (
 	"context"
+	"google.golang.org/grpc/metadata"
 	"log"
 	"net"
 
@@ -41,6 +42,8 @@ type server struct {
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	log.Printf("Received: %v", in.GetName())
 	log.Printf("Context: %v", ctx.Value(1))
+	md, _ := metadata.FromIncomingContext(ctx)
+	log.Printf("Metadata in Context: %v", md.Get("k1"))
 	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
 }
 
